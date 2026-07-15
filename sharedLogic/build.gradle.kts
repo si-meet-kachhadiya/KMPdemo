@@ -39,10 +39,10 @@ kotlin {
 
     sourceSets {
         configurations.configureEach {
-            resolutionStrategy.force("in.co.niteshkukreja:kmp-sdk:1.0.1")
+            resolutionStrategy.force("in.co.niteshkukreja:kmp-sdk:1.0.2")
         }
         commonMain.dependencies {
-            api("in.co.niteshkukreja:kmp-sdk:1.0.1")
+            api("in.co.niteshkukreja:kmp-sdk:1.0.2")
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)

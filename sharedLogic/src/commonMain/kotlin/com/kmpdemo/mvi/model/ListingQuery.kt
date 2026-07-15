@@ -1,4 +1,4 @@
-package com.kmpdemo.listing
+package com.kmpdemo.mvi.model
 
 /**
  * Default query parameters from the demo API URL.

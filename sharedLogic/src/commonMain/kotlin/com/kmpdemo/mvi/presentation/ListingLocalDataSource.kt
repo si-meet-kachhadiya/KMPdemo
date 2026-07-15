@@ -1,5 +1,6 @@
-package com.kmpdemo.listing
+package com.kmpdemo.mvi.presentation
 
+import com.kmpdemo.mvi.model.ListingItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

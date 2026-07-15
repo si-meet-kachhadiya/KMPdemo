@@ -1,4 +1,7 @@
-package com.kmpdemo.listing
+package com.kmpdemo.mvi.presentation
+
+import com.kmpdemo.mvi.model.ListingItem
+import com.kmpdemo.mvi.model.ListingItemDto
 
 private const val IMAGE_CDN_BASE = "https://apps.kkr.in/"
 

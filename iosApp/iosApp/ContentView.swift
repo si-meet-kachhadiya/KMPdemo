@@ -2,7 +2,7 @@ import SwiftUI
 import SharedLogic
 
 struct ContentView: View {
-    @StateObject private var listingModel = MvvmListingScreenModel()
+    @StateObject private var listingModel = MviListingScreenModel()
 
     var body: some View {
         NavigationStack {
@@ -39,7 +39,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("KKR Listing (MVVM)")
+            .navigationTitle("KKR Listing (MVI)")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Refresh") {
@@ -51,18 +51,18 @@ struct ContentView: View {
     }
 }
 
-/// SwiftUI wrapper around shared Kotlin [MvvmListingController].
-/// iOS only observes state and renders UI — API + ViewModel live in SharedLogic.
-final class MvvmListingScreenModel: ObservableObject {
+/// SwiftUI wrapper around shared Kotlin [MviListingController].
+/// iOS only observes state and renders UI — API + MVI live in SharedLogic.
+final class MviListingScreenModel: ObservableObject {
     @Published var items: [ListingItem] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
-    private let controller = MvvmListingController(scope: KmpSdk.shared.scope)
+    private let controller = MviListingController(scope: KmpSdk.shared.scope)
     private var cancellable: Cancellable?
 
     init() {
-        cancellable = controller.observe { [weak self] snapshot in
+        cancellable = controller.observeListingAPI { [weak self] snapshot in
             DispatchQueue.main.async {
                 self?.items = snapshot.items
                 self?.isLoading = snapshot.isLoading

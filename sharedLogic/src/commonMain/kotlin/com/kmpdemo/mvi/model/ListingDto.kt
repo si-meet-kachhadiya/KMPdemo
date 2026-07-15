@@ -1,4 +1,4 @@
-package com.kmpdemo.listing
+package com.kmpdemo.mvi.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

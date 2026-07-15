@@ -1,4 +1,4 @@
-package com.kmpdemo.listing
+package com.kmpdemo.mvi.model
 
 /**
  * Domain model shown in Android/iOS UI.

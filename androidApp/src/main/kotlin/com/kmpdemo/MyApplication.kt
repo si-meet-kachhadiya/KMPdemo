@@ -1,7 +1,7 @@
 package com.kmpdemo
 
 import android.app.Application
-import com.kmpdemo.mvvm.configureMvvmDemo
+import com.kmpdemo.mvi.configureMviDemo
 import com.kmpsdk.KmpSdk
 import com.kmpsdk.init
 
@@ -11,7 +11,7 @@ class MyApplication : Application() {
         super.onCreate()
 
         KmpSdk.init(this) {
-            configureMvvmDemo()
+            configureMviDemo()
         }
     }
 }

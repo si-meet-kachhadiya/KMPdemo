@@ -1,4 +1,4 @@
-package com.kmpdemo.mvvm.presentation
+package com.kmpdemo.mvi.presentation
 
 import com.kmpdemo.mvi.model.ListingItem
 import com.kmpsdk.presentation.mvi.MviState

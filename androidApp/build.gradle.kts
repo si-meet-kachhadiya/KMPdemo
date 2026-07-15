@@ -14,7 +14,7 @@ kotlin {
 
 dependencies {
     implementation(projects.sharedLogic)
-    implementation("in.co.niteshkukreja:kmp-sdk:1.0.1")
+    implementation("in.co.niteshkukreja:kmp-sdk:1.0.2")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -30,10 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.kmpdemo.listing.ListingItem
-import com.kmpdemo.mvvm.presentation.ListingIntent
-import com.kmpdemo.mvvm.presentation.ListingViewModel
-import com.kmpdemo.mvvm.presentation.createListingViewModel
+import com.kmpdemo.mvi.model.ListingItem
+import com.kmpdemo.mvi.presentation.ListingIntent
+import com.kmpdemo.mvi.presentation.ListingViewModel
+import com.kmpdemo.mvi.presentation.createListingViewModel
 import com.kmpsdk.KmpSdk
 import com.kmpsdk.presentation.state.DataState
 import com.kmpsdk.presentation.state.toErrorMessage
@@ -50,11 +50,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // 1) Create MVI ViewModel (resolves GetListingsUseCase from SDK)
         val viewModel = createListingViewModel(lifecycleScope)
+
+        // 2) Trigger KKR listing API call from MainActivity
+        viewModel.dispatch(ListingIntent.Load)
 
         setContent {
             MaterialTheme {
-                MvvmDemoScreen(viewModel = viewModel)
+                MviDemoScreen(viewModel = viewModel)
             }
         }
     }
@@ -62,13 +66,13 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MvvmDemoScreen(viewModel: ListingViewModel) {
+fun MviDemoScreen(viewModel: ListingViewModel) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("KKR Listing (MVVM)") },
+                title = { Text("KKR Listing (MVI)") },
                 actions = {
                     Button(onClick = { viewModel.dispatch(ListingIntent.Refresh) }) {
                         Text("Refresh")

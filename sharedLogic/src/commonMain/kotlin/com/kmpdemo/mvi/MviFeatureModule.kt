@@ -1,18 +1,10 @@
-package com.kmpdemo.mvvm
+package com.kmpdemo.mvi
 
-import com.kmpsdk.KmpSdk
-import com.kmpsdk.core.config.KmpSdkConfig
 import com.kmpsdk.core.di.KmpSdkModule
 import com.kmpsdk.core.di.KmpSdkRegistry
 
-object MvvmFeatureModule : KmpSdkModule {
-    init {
-        val config = KmpSdkConfig(baseUrl = "")
-        KmpSdk.init(config)
-    }
-    
+object MviFeatureModule : KmpSdkModule {
     override fun register(registry: KmpSdkRegistry) {
-
         registry.register<GetListingsUseCase> { ctx ->
             GetListingsUseCase(ctx.networkClient)
         }

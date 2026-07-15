@@ -1,4 +1,4 @@
-package com.kmpdemo.mvvm
+package com.kmpdemo.mvi
 
 import com.kmpdemo.mvi.model.ListingItem
 import com.kmpdemo.mvi.model.ListingQuery
@@ -11,6 +11,9 @@ import com.kmpsdk.domain.error.KmpSdkResult
 class GetListingsUseCase(
     private val networkClient: KmpNetworkClient,
 ) {
+    init {
+
+    }
     suspend fun load(): KmpSdkResult<List<ListingItem>> {
         val path = ListingQuery.buildPath(
             pageOneBased = DEFAULT_PAGE,
