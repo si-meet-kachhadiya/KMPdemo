@@ -1,6 +1,6 @@
-package com.kmpdemo.mvi.presentation
+package com.kmpdemo.mvi.listing.presentation
 
-import com.kmpdemo.mvi.model.ListingItem
+import com.kmpdemo.mvi.listing.model.ListingItem
 import com.kmpsdk.presentation.mvi.MviState
 import com.kmpsdk.presentation.state.DataState
 

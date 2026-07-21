@@ -5,3 +5,11 @@ PRODUCT_BUNDLE_IDENTIFIER=com.kmpdemo.KMPdemo$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0
+
+// SharedLogic BuildConfig — change to "production" for release schemes
+BUILD_VARIANT=staging
+BUILD_TIME=Local Xcode build
+GIT_COMMIT=unknown
+GIT_BRANCH=unknown
+IMAGE_BASE_URL=https://stagingapps.kkr.in/static-assets/waf-images/
+IMAGE_VERSION=1.89

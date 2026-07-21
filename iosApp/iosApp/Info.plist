@@ -4,5 +4,17 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>BUILD_VARIANT</key>
+	<string>$(BUILD_VARIANT)</string>
+	<key>BUILD_TIME</key>
+	<string>$(BUILD_TIME)</string>
+	<key>GIT_COMMIT</key>
+	<string>$(GIT_COMMIT)</string>
+	<key>GIT_BRANCH</key>
+	<string>$(GIT_BRANCH)</string>
+	<key>IMAGE_BASE_URL</key>
+	<string>$(IMAGE_BASE_URL)</string>
+	<key>IMAGE_VERSION</key>
+	<string>$(IMAGE_VERSION)</string>
 </dict>
 </plist>

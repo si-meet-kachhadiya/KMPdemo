@@ -1,4 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -27,8 +30,27 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.kotlinx.coroutines.android)
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     debugImplementation(libs.androidx.ui.tooling)
+}
+
+fun gitCommit(): String = runCatching {
+    providers.exec {
+        commandLine("git", "rev-parse", "--short", "HEAD")
+    }.standardOutput.asText.get().trim()
+}.getOrDefault("unknown")
+
+fun gitBranch(): String = runCatching {
+    providers.exec {
+        commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
+    }.standardOutput.asText.get().trim()
+}.getOrDefault("unknown")
+
+fun buildTimeUtc(): String {
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    format.timeZone = TimeZone.getTimeZone("UTC")
+    return format.format(Date())
 }
 
 android {
@@ -41,7 +63,46 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "BUILD_TIME", "\"${buildTimeUtc()}\"")
+        buildConfigField("String", "GIT_COMMIT", "\"${gitCommit()}\"")
+        buildConfigField("String", "GIT_BRANCH", "\"${gitBranch()}\"")
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    flavorDimensions += "env"
+    productFlavors {
+        create("staging") {
+            dimension = "env"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            buildConfigField("String", "BUILD_VARIANT", "\"staging\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://stagingapps.kkr.in\"")
+            buildConfigField(
+                "String",
+                "IMAGE_BASE_URL",
+                "\"https://stagingapps.kkr.in/static-assets/waf-images/\"",
+            )
+            buildConfigField("String", "IMAGE_VERSION", "\"1.89\"")
+            buildConfigField("String", "APP_NAME", "\"KMPdemo (Staging)\"")
+        }
+        create("production") {
+            dimension = "env"
+            buildConfigField("String", "BUILD_VARIANT", "\"production\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://apps.kkr.in\"")
+            buildConfigField(
+                "String",
+                "IMAGE_BASE_URL",
+                "\"https://apps.kkr.in/static-assets/waf-images/\"",
+            )
+            buildConfigField("String", "IMAGE_VERSION", "\"1.89\"")
+            buildConfigField("String", "APP_NAME", "\"KMPdemo\"")
+        }
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

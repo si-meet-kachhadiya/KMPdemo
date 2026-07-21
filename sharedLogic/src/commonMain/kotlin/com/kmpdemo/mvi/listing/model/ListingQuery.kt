@@ -1,7 +1,7 @@
-package com.kmpdemo.mvi.model
+package com.kmpdemo.mvi.listing.model
 
 /**
- * Default query parameters from the demo API URL.
+ * Default query parameters for `/apiv4/listing`.
  * Pagination uses 1-based `pgnum` as required by the backend.
  */
 object ListingQuery {

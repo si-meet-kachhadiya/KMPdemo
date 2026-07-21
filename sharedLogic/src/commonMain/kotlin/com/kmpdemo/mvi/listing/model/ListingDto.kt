@@ -1,4 +1,4 @@
-package com.kmpdemo.mvi.model
+package com.kmpdemo.mvi.listing.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -26,7 +26,6 @@ data class ListingMetaDto(
 
 /**
  * API response wrapper for `/apiv4/listing`.
- *
  * KKR returns items under `content.items`; root `data` is often null.
  */
 @Serializable
@@ -86,9 +85,6 @@ data class ListingResponseDto(
         }.getOrDefault(emptyList())
 }
 
-/**
- * Raw listing item from the KKR `/apiv4/listing` API.
- */
 @Serializable
 data class ListingItemDto(
     @SerialName("asset_id") val assetId: Int? = null,
@@ -106,6 +102,7 @@ data class ListingItemDto(
     val imageurl: String? = null,
     val imageUrl: String? = null,
     val thumbnail: String? = null,
+    @SerialName("title_alias") val titleAlias: String? = null,
     @SerialName("published_date") val publishedDateApi: String? = null,
     val publishdate: String? = null,
     val publishDate: String? = null,

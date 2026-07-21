@@ -1,6 +1,6 @@
 package com.kmpdemo.mvvm.presentation
 
-import com.kmpdemo.mvi.model.ListingItem
+import com.kmpdemo.mvi.listing.model.ListingItem
 import com.kmpsdk.KmpSdk.scope
 import com.kmpsdk.platform.Cancellable
 import com.kmpsdk.platform.asObservable

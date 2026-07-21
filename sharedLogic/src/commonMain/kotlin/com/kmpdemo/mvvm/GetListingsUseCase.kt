@@ -1,9 +1,9 @@
 package com.kmpdemo.mvvm
 
-import com.kmpdemo.mvi.model.ListingItem
-import com.kmpdemo.mvi.model.ListingQuery
-import com.kmpdemo.mvi.model.ListingResponseDto
-import com.kmpdemo.mvi.presentation.toDomain
+import com.kmpdemo.mvi.listing.model.ListingItem
+import com.kmpdemo.mvi.listing.model.ListingQuery
+import com.kmpdemo.mvi.listing.model.ListingResponseDto
+import com.kmpdemo.mvi.listing.presentation.toDomain
 import com.kmpsdk.data.network.KmpNetworkClient
 import com.kmpsdk.domain.error.KmpSdkResult
 

@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,15 +26,20 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.kmpdemo.mvi.model.ListingItem
-import com.kmpdemo.mvi.presentation.ListingIntent
-import com.kmpdemo.mvi.presentation.ListingViewModel
-import com.kmpdemo.mvi.presentation.createListingViewModel
+import com.kmpdemo.config.BuildConfig
+import com.kmpdemo.mvi.listing.model.ListingItem
+import com.kmpdemo.mvi.listing.presentation.ListingIntent
+import com.kmpdemo.mvi.listing.presentation.ListingViewModel
+import com.kmpdemo.mvi.listing.presentation.createListingViewModel
+import com.kmpdemo.photo.PhotoDetailScreen
 import com.kmpsdk.KmpSdk
 import com.kmpsdk.presentation.state.DataState
 import com.kmpsdk.presentation.state.toErrorMessage
@@ -50,15 +56,35 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // 1) Create MVI ViewModel (resolves GetListingsUseCase from SDK)
         val viewModel = createListingViewModel(lifecycleScope)
-
-        // 2) Trigger KKR listing API call from MainActivity
         viewModel.dispatch(ListingIntent.Load)
 
         setContent {
             MaterialTheme {
-                MviDemoScreen(viewModel = viewModel)
+                var selectedTitleAlias by remember { mutableStateOf<String?>(null) }
+
+                if (selectedTitleAlias != null) {
+                    PhotoDetailScreen(
+                        titleAlias = selectedTitleAlias!!,
+                        onBackClick = { selectedTitleAlias = null },
+                    )
+                } else {
+                    MviDemoScreen(
+                        viewModel = viewModel,
+                        onItemClick = { item ->
+                            val alias = item.titleAlias
+                            if (alias.isNullOrBlank()) {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "No titleAlias for this item",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            } else {
+                                selectedTitleAlias = alias
+                            }
+                        },
+                    )
+                }
             }
         }
     }
@@ -66,13 +92,16 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MviDemoScreen(viewModel: ListingViewModel) {
+fun MviDemoScreen(
+    viewModel: ListingViewModel,
+    onItemClick: (ListingItem) -> Unit,
+) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("KKR Listing (MVI)") },
+                title = { Text("${BuildConfig.appName} · ${BuildConfig.buildVariant}") },
                 actions = {
                     Button(onClick = { viewModel.dispatch(ListingIntent.Refresh) }) {
                         Text("Refresh")
@@ -81,7 +110,11 @@ fun MviDemoScreen(viewModel: ListingViewModel) {
             )
         },
     ) { innerPadding ->
-        ListingContent(listingsState = state.listings, padding = innerPadding)
+        ListingContent(
+            listingsState = state.listings,
+            padding = innerPadding,
+            onItemClick = onItemClick,
+        )
     }
 }
 
@@ -89,6 +122,7 @@ fun MviDemoScreen(viewModel: ListingViewModel) {
 private fun ListingContent(
     listingsState: DataState<List<ListingItem>>,
     padding: PaddingValues,
+    onItemClick: (ListingItem) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -102,7 +136,7 @@ private fun ListingContent(
                 if (listingsState.data.isEmpty()) {
                     StatusMessage("No listings returned for page 2")
                 } else {
-                    ListingList(items = listingsState.data)
+                    ListingList(items = listingsState.data, onItemClick = onItemClick)
                 }
             }
             is DataState.Failure -> StatusMessage(listingsState.toErrorMessage())
@@ -112,21 +146,31 @@ private fun ListingContent(
 }
 
 @Composable
-private fun ListingList(items: List<ListingItem>) {
+private fun ListingList(
+    items: List<ListingItem>,
+    onItemClick: (ListingItem) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(items, key = { it.id }) { item ->
-            ListingCard(item)
+            ListingCard(item = item, onClick = { onItemClick(item) })
         }
     }
 }
 
 @Composable
-private fun ListingCard(item: ListingItem) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+private fun ListingCard(
+    item: ListingItem,
+    onClick: () -> Unit,
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = item.title,

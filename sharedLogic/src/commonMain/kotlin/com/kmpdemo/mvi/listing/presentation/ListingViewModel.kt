@@ -1,18 +1,12 @@
-package com.kmpdemo.mvi.presentation
+package com.kmpdemo.mvi.listing.presentation
 
-import com.kmpdemo.mvi.GetListingsUseCase
+import com.kmpdemo.mvi.listing.GetListingsUseCase
 import com.kmpsdk.KmpSdk
 import com.kmpsdk.domain.error.KmpSdkResult
 import com.kmpsdk.presentation.mvi.MviViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-/**
- * MVI ViewModel:
- * - UI/dispatches send [ListingIntent]
- * - [ListingReducer] is the only place that updates [ListingState]
- * - ViewModel runs side effects (API) then dispatches result intents
- */
 class ListingViewModel(
     scope: CoroutineScope,
     private val getListingsUseCase: GetListingsUseCase,

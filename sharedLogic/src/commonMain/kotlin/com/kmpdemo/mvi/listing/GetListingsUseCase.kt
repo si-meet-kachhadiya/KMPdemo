@@ -1,9 +1,9 @@
-package com.kmpdemo.mvi
+package com.kmpdemo.mvi.listing
 
-import com.kmpdemo.mvi.model.ListingItem
-import com.kmpdemo.mvi.model.ListingQuery
-import com.kmpdemo.mvi.model.ListingResponseDto
-import com.kmpdemo.mvi.presentation.toDomain
+import com.kmpdemo.mvi.listing.model.ListingItem
+import com.kmpdemo.mvi.listing.model.ListingQuery
+import com.kmpdemo.mvi.listing.model.ListingResponseDto
+import com.kmpdemo.mvi.listing.presentation.toDomain
 import com.kmpsdk.data.network.KmpNetworkClient
 import com.kmpsdk.domain.error.KmpSdkResult
 
@@ -11,9 +11,6 @@ import com.kmpsdk.domain.error.KmpSdkResult
 class GetListingsUseCase(
     private val networkClient: KmpNetworkClient,
 ) {
-    init {
-
-    }
     suspend fun load(): KmpSdkResult<List<ListingItem>> {
         val path = ListingQuery.buildPath(
             pageOneBased = DEFAULT_PAGE,
